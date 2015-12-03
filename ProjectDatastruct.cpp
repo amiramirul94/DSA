@@ -176,21 +176,24 @@ int main()
 {
 	ContactList* myContacts = new ContactList();
 	bool continueAdd=true;
-	
+	cout<<"===========My Info=========="<<endl;
 	Contact contact("zafran",0137446251,"muhammad.zafran@outlook.com");
 	myContacts->addContact(contact);
 	myContacts->displayContact();
 	
 	int choice=0;
 	int deleteNo;
-		newContact(myContacts);
-		
-		myContacts->displayContact();
+	
+	
 
 	
-	choice = menu();
-	
 	while(choice!=4){
+		
+		cout<<"1-Add Contact"<<endl;
+		cout<<"2-Delete Contact"<<endl;
+		cout<<"3-View contacts"<<endl;
+		cout<<"4-Exit application"<<endl;
+		cin>>choice;
 		
 		if(choice==1)
 		{	
@@ -208,7 +211,10 @@ int main()
 			myContacts->displayContact();
 		}
 		
-		choice= menu();
+		
+		
+	
+	
 	}
 	
 
@@ -216,17 +222,7 @@ int main()
 	
 }
 
-int menu()
-{
-	int choice;
-	cout<<"1-Add Contact"<<endl;
-	cout<<"2-Delete Contact"<<endl;
-	cout<<"3-View contacts"<<endl;
-	cout<<"4-Exit application"<<endl;
-	cin>>choice;
-	
-	return choice;
-}
+
 
 
 bool newContact(ContactList* myContacts)
