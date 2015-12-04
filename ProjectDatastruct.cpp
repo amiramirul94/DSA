@@ -1,5 +1,6 @@
 #include<iostream>
 #include<string.h>
+#include<fstream>
 
 using namespace std;
 
@@ -12,6 +13,7 @@ class Contact{
 		char name[30];
 		int phoneNumber;
 		char email[30];
+		int id;
 		
 	public:
 		Contact(){
@@ -20,9 +22,11 @@ class Contact{
 		void setName(char* n);
 		void setPhone(int n);
 		void setEmail(char* email);
+		void setId(int i);
 		char* getName();
 		int getPhone();
 		char* getEmail();
+		int getId();
 };
 
 
@@ -49,6 +53,11 @@ void Contact::setEmail(char* e)
 	strcpy(email,e);
 } 
 
+void Contact::setId(int i)
+{
+	id=i;
+}
+
 
 char* Contact::getName()
 {
@@ -67,6 +76,10 @@ int Contact::getPhone()
 	return phoneNumber;
 }
 
+int Contact::getId()
+{
+	return id;
+}
 
 
 
@@ -95,6 +108,7 @@ class ContactList{
 		void addContact(Contact contact);
 		void displayContact() const;
 		void deleteContact(int num);
+		void writeFile();
 		
 		
 	
@@ -104,7 +118,7 @@ void ContactList::addContact(Contact contact)
 {
 	ContactNode *newContact;
 	ContactNode *nodePtr;
-	
+	int i=0;
 	newContact = new ContactNode;
 	newContact->contactNode= contact;
 	newContact->next=NULL;
@@ -119,8 +133,10 @@ void ContactList::addContact(Contact contact)
 		while(nodePtr->next)
 		{
 			nodePtr = nodePtr->next;
+			i++;
 		}
 		
+		contact.setId(i);
 		nodePtr->next= newContact;
 	}
 	
@@ -132,10 +148,10 @@ void ContactList::displayContact() const
 	ContactNode* contactPtr;
 	
 	contactPtr = head;
-	int i=1;
+	int i=0;
 	while(contactPtr)
 	{
-		cout<<"Contact id :"<<i; 
+		cout<<"Contact id :"<<i<<endl;
 		cout<<"Contact name :"<<contactPtr->contactNode.getName()<<endl;
 		cout<<"Phone number :"<<contactPtr->contactNode.getPhone()<<endl;
 		cout<<"email :"<<contactPtr->contactNode.getEmail()<<endl;
@@ -166,15 +182,44 @@ void ContactList::deleteContact(int num)
 	
 }
 
+void ContactList::writeFile()
+{
+	
+	ContactNode* contactPtr;
+	ofstream outFile;
+	outFile.open("contact.txt");
+	
+	contactPtr = head;
+	int i=1;
+	while(contactPtr)
+	{
+	
+		outFile<<contactPtr->contactNode.getName()<<endl;
+		outFile<<contactPtr->contactNode.getPhone()<<endl;
+		outFile<<contactPtr->contactNode.getEmail()<<endl;
+		
+		
+		contactPtr= contactPtr->next;	
+		
+	}
+	
+}
 
+
+
+//Function Prototype
 bool newContact(ContactList* );
 
-int menu();
+void readFile(ContactList* );
+
+
 
 
 int main()
 {
+	//Contact List	
 	ContactList* myContacts = new ContactList();
+	readFile(myContacts);  //Read contact list from info
 	bool continueAdd=true;
 	cout<<"===========My Info=========="<<endl;
 	Contact contact("zafran",0137446251,"muhammad.zafran@outlook.com");
@@ -187,8 +232,9 @@ int main()
 	
 
 	
+	//loop while user wants to continue
 	while(choice!=4){
-		
+		//menu
 		cout<<"1-Add Contact"<<endl;
 		cout<<"2-Delete Contact"<<endl;
 		cout<<"3-View contacts"<<endl;
@@ -209,10 +255,11 @@ int main()
 		}else if(choice==3)
 		{
 			myContacts->displayContact();
+		}else if(choice==4)
+		{
+			myContacts->writeFile();
 		}
-		
-		
-		
+			
 	
 	
 	}
@@ -224,7 +271,7 @@ int main()
 
 
 
-
+//add new contact
 bool newContact(ContactList* myContacts)
 {
 	char* name;
@@ -244,6 +291,8 @@ bool newContact(ContactList* myContacts)
 	
 	contact.setEmail(email);
 	
+	
+	//append to contact list
 	myContacts->addContact(contact);
 	
 	cout<<"Continue? 1- Yes 2- No >>";
@@ -257,6 +306,41 @@ bool newContact(ContactList* myContacts)
 		return false;	
 	}
 }
+
+//read from File
+void readFile(ContactList* myContact)
+{
+	ifstream inFile;
+	Contact contact;
+	int id;
+	int phone;
+	char name[30];
+	char email[30];
+	inFile.open("contact.txt");
+
+
+	while(!inFile.eof())
+	{
+		
+		inFile>>name;
+		inFile>>phone;
+		inFile>>email;
+		contact.setId(id);
+		contact.setName(name);
+		contact.setPhone(phone);
+		contact.setEmail(email);
+		
+		myContact->addContact(contact);
+		cout<<id<<endl;
+		cout<<name<<endl;
+		cout<<phone<<endl;
+		cout<<email<<endl;
+	}
+
+	
+}
+
+
 
 
 
