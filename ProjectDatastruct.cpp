@@ -205,8 +205,110 @@ void ContactList::writeFile()
 	
 }
 
+struct ContactQueue{
+	Contact contactQueue;
+	ContactQueue* next;
+};
 
 
+class MessageQueue{
+	
+	private:
+		ContactQueue queue;
+		ContactQueue *front;
+		ContactQueue *rear;
+		int num;
+		
+	public:
+		MessageQueue();
+		~MessageQueue();
+		void enqueue(Contact contact);
+		void dequeue();
+		bool isEmpty();
+		bool isFull();
+		void clear();
+		
+		
+		
+};
+
+
+MessageQueue::MessageQueue()
+{
+	front = NULL;
+	rear = NULL;
+	
+	num = 0;
+}
+
+MessageQueue::~MessageQueue()
+{
+	clear();
+}
+
+void MessageQueue::enqueue(Contact contact)
+{
+	ContactQueue *newNode;
+	newNode = new ContactQueue;
+	newNode->contactQueue = contact;
+	newNode->next = NULL;
+	
+	if(isEmpty())
+	{
+		front = newNode;
+		rear = newNode;
+		
+	}else {
+		rear->next = newNode;
+		rear = newNode;
+	}
+	num++;
+}
+
+
+void MessageQueue::dequeue()
+{
+	ContactQueue *temp= NULL;
+	ContactQueue *dummy;
+	
+	if(isEmpty())
+	{
+		cout<<"The queue is empty"<<endl;
+	}else{
+		dummy->contactQueue = front->contactQueue;
+		temp = front;
+		front = front->next;
+		delete temp;
+		
+		num--;
+		
+	}
+}
+
+bool MessageQueue::isEmpty()
+{
+	bool status;
+	
+	if(num>0)
+	{
+		status = false;
+	}else {
+		status = true;
+	}
+	
+	return status;
+}
+
+
+void MessageQueue::clear()
+{
+	Contact contact;
+	
+	while(!isEmpty())
+	{
+		dequeue();
+	}
+}
 //Function Prototype
 bool newContact(ContactList* );
 
